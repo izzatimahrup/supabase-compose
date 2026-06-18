@@ -215,7 +215,7 @@ services:
       timeout: 5s
       interval: 5s
       retries: 3
-      start_period: 10s
+      start_period: 30s
     environment:
       ANON_KEY: ${ANON_KEY}
       SERVICE_KEY: ${SERVICE_ROLE_KEY}
