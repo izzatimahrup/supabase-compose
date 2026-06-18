@@ -342,7 +342,7 @@ services:
     restart: unless-stopped
     ports:
       - "5437:5432"
-      - "6547:6543"
+      - "6548:6543"
     volumes:
       - ./volumes/pooler/pooler.exs:/etc/pooler/pooler.exs:ro,z
     healthcheck:
