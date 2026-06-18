@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+volumes/storage/
+volumes/db/data/
+*.key
+*.pem
+.DS_Store
