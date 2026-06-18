@@ -76,7 +76,7 @@ services:
       studio:
         condition: service_healthy
     ports:
-      - "8002:8000/tcp"
+      - "8003:8000/tcp"
       - "8445:8443/tcp"
     volumes:
       - ./volumes/api/kong.yml:/home/kong/temp.yml:ro,z
