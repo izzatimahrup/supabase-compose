@@ -1,6 +1,34 @@
 _format_version: '2.1'
 _transform: true
 
+### CORS config shared by all routes — edit the `origins` list below if you add more frontend domains
+x-cors-config: &cors-config
+  name: cors
+  config:
+    origins:
+      - "http://localhost:5173"
+      - "https://your-production-frontend-domain.com"
+    methods:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+      - OPTIONS
+    headers:
+      - Accept
+      - Accept-Version
+      - Authorization
+      - Content-Type
+      - apikey
+      - X-Client-Info
+      - X-Requested-With
+    exposed_headers:
+      - X-Auth-Token
+    credentials: true
+    max_age: 3600
+    preflight_continue: false
+
 ###
 ### Consumers / Users
 ###
@@ -46,7 +74,8 @@ services:
         paths:
           - /auth/v1/verify
     plugins:
-      - name: cors
+      - <<: *cors-config
+
   - name: auth-v1-open-callback
     _comment: 'Auth: /auth/v1/callback* -> http://auth:9999/callback*'
     url: http://auth:9999/callback
@@ -56,7 +85,8 @@ services:
         paths:
           - /auth/v1/callback
     plugins:
-      - name: cors
+      - <<: *cors-config
+
   - name: auth-v1-open-authorize
     _comment: 'Auth: /auth/v1/authorize* -> http://auth:9999/authorize*'
     url: http://auth:9999/authorize
@@ -66,7 +96,8 @@ services:
         paths:
           - /auth/v1/authorize
     plugins:
-      - name: cors
+      - <<: *cors-config
+
   - name: auth-v1-open-jwks
     _comment: 'Auth: /auth/v1/.well-known/jwks.json -> http://auth:9999/.well-known/jwks.json'
     url: http://auth:9999/.well-known/jwks.json
@@ -76,7 +107,7 @@ services:
         paths:
           - /auth/v1/.well-known/jwks.json
     plugins:
-      - name: cors
+      - <<: *cors-config
 
   - name: auth-v1-open-sso-acs
     url: "http://auth:9999/sso/saml/acs"
@@ -86,7 +117,7 @@ services:
         paths:
         - /sso/saml/acs
     plugins:
-      - name: cors
+      - <<: *cors-config
 
   - name: auth-v1-open-sso-metadata
     url: "http://auth:9999/sso/saml/metadata"
@@ -96,7 +127,7 @@ services:
         paths:
         - /sso/saml/metadata
     plugins:
-      - name: cors
+      - <<: *cors-config
 
   ## Secure Auth routes
   - name: auth-v1
@@ -108,7 +139,7 @@ services:
         paths:
           - /auth/v1/
     plugins:
-      - name: cors
+      - <<: *cors-config
       - name: key-auth
         config:
           hide_credentials: false
@@ -137,7 +168,7 @@ services:
         paths:
           - /rest/v1/
     plugins:
-      - name: cors
+      - <<: *cors-config
       - name: key-auth
         config:
           hide_credentials: false
@@ -166,7 +197,7 @@ services:
         paths:
           - /graphql/v1
     plugins:
-      - name: cors
+      - <<: *cors-config
       - name: key-auth
         config:
           hide_credentials: false
@@ -197,7 +228,7 @@ services:
         paths:
           - /realtime/v1/
     plugins:
-      - name: cors
+      - <<: *cors-config
       - name: key-auth
         config:
           hide_credentials: false
@@ -258,7 +289,7 @@ services:
         paths:
           - /realtime/v1/api
     plugins:
-      - name: cors
+      - <<: *cors-config
       - name: key-auth
         config:
           hide_credentials: false
@@ -295,7 +326,7 @@ services:
         paths:
           - /storage/v1/
     plugins:
-      - name: cors
+      - <<: *cors-config
       - name: request-transformer
         config:
           add:
@@ -324,7 +355,7 @@ services:
         paths:
           - /functions/v1/
     plugins:
-      - name: cors
+      - <<: *cors-config
 
   ## OAuth 2.0 Authorization Server Metadata (RFC 8414)
   - name: well-known-oauth
@@ -336,7 +367,7 @@ services:
         paths:
           - /.well-known/oauth-authorization-server
     plugins:
-      - name: cors
+      - <<: *cors-config
 
   ## Analytics routes
   ## Not used - Studio and Vector talk directly to analytics via Docker networking.
@@ -434,7 +465,7 @@ services:
         paths:
           - /
     plugins:
-      - name: cors
+      - <<: *cors-config
       - name: basic-auth
         config:
           hide_credentials: true
