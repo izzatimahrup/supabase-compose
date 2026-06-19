@@ -6,12 +6,7 @@ services:
     container_name: supabase-studio-assetcare
     image: supabase/studio:2026.06.03-sha-0bca601
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
-      timeout: 30s
-      interval: 30s
-      retries: 5
-      start_period: 60s
+ 
     environment:
       HOSTNAME: "0.0.0.0"
       STUDIO_PG_META_URL: http://meta:8080
