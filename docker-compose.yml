@@ -1,4 +1,4 @@
-name: supabase
+name: supabase-assetcare
 
 services:
 
@@ -35,10 +35,10 @@ services:
       - dokploy-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.supabase-studio.rule=Host(`studio-assetcare.garisaksara.com.my`)"
-      - "traefik.http.routers.supabase-studio.entrypoints=websecure"
-      - "traefik.http.routers.supabase-studio.tls.certResolver=letsencrypt"
-      - "traefik.http.services.supabase-studio.loadbalancer.server.port=3000"
+      - "traefik.http.routers.supabase-studio-assetcare.rule=Host(`studio-assetcare.garisaksara.com.my`)"
+      - "traefik.http.routers.supabase-studio-assetcare.entrypoints=websecure"
+      - "traefik.http.routers.supabase-studio-assetcare.tls.certResolver=letsencrypt"
+      - "traefik.http.services.supabase-studio-assetcare.loadbalancer.server.port=3000"
     volumes:
       - ./volumes/snippets:/app/snippets:z
       - ./volumes/functions:/app/edge-functions:ro,z
@@ -54,18 +54,15 @@ services:
       dokploy-network:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.supabase-kong.rule=Host(`supabase-assetcare.garisaksara.com.my`)"
-      - "traefik.http.routers.supabase-kong.entrypoints=websecure"
-      - "traefik.http.routers.supabase-kong.tls.certResolver=letsencrypt"
-      - "traefik.http.services.supabase-kong.loadbalancer.server.port=8000"
+      - "traefik.http.routers.supabase-kong-assetcare.rule=Host(`supabase-assetcare.garisaksara.com.my`)"
+      - "traefik.http.routers.supabase-kong-assetcare.entrypoints=websecure"
+      - "traefik.http.routers.supabase-kong-assetcare.tls.certResolver=letsencrypt"
+      - "traefik.http.services.supabase-kong-assetcare.loadbalancer.server.port=8000"
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 5s
       timeout: 5s
       retries: 5
-    # depends_on:  <-- REMOVED
-    #   studio:
-    #     condition: service_healthy
     ports:
       - "8003:8000/tcp"
       - "8446:8443/tcp"
