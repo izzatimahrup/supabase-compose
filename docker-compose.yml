@@ -48,32 +48,32 @@ services:
       - ./volumes/snippets:/app/snippets:z
       - ./volumes/functions:/app/edge-functions:ro,z
 
-kong:
-  container_name: supabase-kong-assetcare
-  image: kong/kong:3.9.1
-  restart: unless-stopped
-  networks:
-    default:
-      aliases:
-        - api-gw
+  kong:
+    container_name: supabase-kong-assetcare
+    image: kong/kong:3.9.1
+    restart: unless-stopped
+    networks:
+      default:
+        aliases:
+          - api-gw
       dokploy-network:
-  labels:
-    - "traefik.enable=true"
-    - "traefik.http.routers.supabase-kong.rule=Host(`supabase-assetcare.garisaksara.com.my`)"
-    - "traefik.http.routers.supabase-kong.entrypoints=websecure"
-    - "traefik.http.routers.supabase-kong.tls.certResolver=letsencrypt"
-    - "traefik.http.services.supabase-kong.loadbalancer.server.port=8000"
-  healthcheck:
-    test: ["CMD", "kong", "health"]
-    interval: 5s
-    timeout: 5s
-    retries: 5
-  # depends_on:  <-- COMMENT OUT OR REMOVE THIS ENTIRE SECTION
-  #   studio:
-  #     condition: service_healthy
-  ports:
-    - "8003:8000/tcp"
-    - "8446:8443/tcp"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.supabase-kong.rule=Host(`supabase-assetcare.garisaksara.com.my`)"
+      - "traefik.http.routers.supabase-kong.entrypoints=websecure"
+      - "traefik.http.routers.supabase-kong.tls.certResolver=letsencrypt"
+      - "traefik.http.services.supabase-kong.loadbalancer.server.port=8000"
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # depends_on:  <-- REMOVED
+    #   studio:
+    #     condition: service_healthy
+    ports:
+      - "8003:8000/tcp"
+      - "8446:8443/tcp"
     volumes:
       - ./volumes/api/kong.yml:/home/kong/temp.yml:ro,z
       - ./volumes/api/kong-entrypoint.sh:/home/kong/kong-entrypoint.sh:ro,z
